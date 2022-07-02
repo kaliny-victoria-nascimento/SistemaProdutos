@@ -16,9 +16,13 @@ if(modelName == "Product")
     if(modelAction == "List")
     {
         Console.WriteLine("Product List");
-        foreach (var product in productRepository.GetAll())
-        {
-            Console.WriteLine("{0}, {1}, {2}", product.Id, product.Name, product.Price, product.Active);
+        if(productRepository.GetAll().Any()) {
+            foreach (var product in productRepository.GetAll())
+            {
+                Console.WriteLine("{0}, {1}, {2}, {3}", product.Id, product.Name, product.Price, product.Active);
+            } 
+        } else {
+            Console.WriteLine("Nenhum produto cadastrado.");
         }
     }
 
@@ -28,6 +32,7 @@ if(modelName == "Product")
         var name = args[3];
         var price = Convert.ToDouble(args[4]);
         var active = Convert.ToBoolean(args[5]);
+        Console.WriteLine("Product New");
         
         var product = new Product(id, name, price, active);
 
@@ -45,6 +50,7 @@ if(modelName == "Product")
     if(modelAction == "Delete")
     {
         var id = Convert.ToInt32(args[2]);
+        Console.WriteLine("Product Delete");
 
         if(productRepository.ExitsById(id))
         {
@@ -60,6 +66,7 @@ if(modelName == "Product")
     if(modelAction == "Enable")
     {
         var id = Convert.ToInt32(args[2]);
+        Console.WriteLine("Product Enable");
         if(productRepository.ExitsById(id))
         {
             productRepository.Enable(id);
@@ -74,6 +81,7 @@ if(modelName == "Product")
     if(modelAction == "Disable")
     {
         var id = Convert.ToInt32(args[2]);
+        Console.WriteLine("Product Disable");
         if(productRepository.ExitsById(id))
         {
             productRepository.Disable(id);
@@ -82,6 +90,76 @@ if(modelName == "Product")
         else
         {
             Console.WriteLine($"Produto {id} não encontrado");
+        }
+    }
+
+    if(modelAction == "PriceBetween")
+    {
+        var initialPrice = Convert.ToDouble(args[2]);
+        var endPrice = Convert.ToDouble(args[3]);
+        Console.WriteLine("Product PriceBetween");
+
+        if(productRepository.GetAllWithPriceBetween(initialPrice,endPrice).Any())
+        {
+            foreach(var product in productRepository.GetAllWithPriceBetween(initialPrice,endPrice))
+            {
+                Console.WriteLine($" {product.Id}, {product.Name}, {product.Price}, {product.Active}");
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Nenhum produto encontrado dentro do intervalo de preço R$ {initialPrice} e R$ {endPrice}");
+        }
+    }
+
+    if(modelAction == "PriceHigherThan")
+    {   
+        var price = Convert.ToDouble(args[2]);
+        Console.WriteLine("Product PriceHigherThan");
+        
+        if(productRepository.GetAllWithPriceHigherThan(price).Any())
+        {
+            foreach(var product in productRepository.GetAllWithPriceHigherThan(price))
+            {
+                Console.WriteLine($" {product.Id}, {product.Name}, {product.Price}, {product.Active}");
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Nenhum produto encontrado com preço maior que R$ {price}.");
+        }
+
+    }
+
+    if(modelAction == "PriceLowerThan")
+    {   
+        var price = Convert.ToDouble(args[2]);
+        Console.WriteLine("Product PriceLowerThan");
+        
+        if(productRepository.GetAllWithPriceLowerThan(price).Any())
+        {
+            foreach(var product in productRepository.GetAllWithPriceLowerThan(price))
+            {
+                Console.WriteLine($" {product.Id}, {product.Name}, {product.Price}, {product.Active}");
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Nenhum produto encontrado com preço menor que R$ {price}."); 
+        }
+
+    }
+
+    if(modelAction == "AveragePrice")
+    {
+        Console.WriteLine("Product AveragePrice");
+        if(productRepository.GetAll().Any())
+        {
+            Console.WriteLine($"A média dos preços é R$ {productRepository.GetAveragePrice()}");
+        }
+        else
+        {
+            Console.WriteLine($"Nenhum produto cadastrado.");
         }
     }
 }
