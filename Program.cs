@@ -134,7 +134,7 @@ if(modelName == "Product")
     if(modelAction == "PriceLowerThan")
     {   
         var price = Convert.ToDouble(args[2]);
-        Console.WriteLine("Product PriceLowerThan");
+        Console.WriteLine("Product PriceLowerThan.");
         
         if(productRepository.GetAllWithPriceLowerThan(price).Any())
         {
